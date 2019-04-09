@@ -41,11 +41,21 @@ function Contact(firstName, lastName, phoneNumber) {
 	this.firstName = firstName;
 	this.lastName = lastName;
 	this.phoneNumber = phoneNumber;
+	this.address = []
+}
+
+function Address(address, type) {
+	this.address = address,
+	this.type = type
 }
 
 Contact.prototype.fullName = function() {
 	return this.firstName + ' ' + this.lastName;
 };
+
+Contact.prototype.addAddress = function(add, type) {
+	this.address.push(new Address(add, type));
+}
 
 var addressBook = new AddressBook();
 
@@ -64,19 +74,38 @@ function showContact(contactId) {
 	$('.first-name').html(contact.firstName);
 	$('.last-name').html(contact.lastName);
 	$('.phone-number').html(contact.phoneNumber);
+	contact.address.forEach(function(address) {
+		$('#add').append('<p>' + address.type + ': ' + address.address + '</p>');  //"append" might not be right.. goal is to refresh everything
+	});
 	var buttons = $('#buttons');
 	buttons.empty();
-	buttons.append('<button class=\'deleteButton\' id=' + contact.id + '>Delete</button>');
+	buttons.append('<button class="delete-button" id=' + contact.id + '>Delete</button>');
+	buttons.append('<button class="add-address-button" id=' + contact.id + '>Add Address</button>');
 }
 
 function attachContactListeners() {
 	$('ul#contacts').on('click', 'li', function() {
 		showContact(this.id);
 	});
-	$('#buttons').on('click', '.deleteButton', function() {
+	$('#buttons').on('click', '.delete-button', function() {
+
 		addressBook.deleteContact(this.id);
 		$('#show-contact').hide();
 		displayContactDetails(addressBook);
+	});
+	$('#buttons').off().on('click', '.add-address-button', function() {
+		if($('.hidden').length < 1) {
+			console.log("test");
+			$('.showing').attr('class', 'hidden');
+			contact = addressBook.findContact(this.id);
+			contact.addAddress($('input#address-add').val(), $('#add-address-type option:selected').text());
+			displayContactDetails(addressBook);
+			$('input#address-add').val('');
+			$('input#add-address-type').val('');
+			showContact(this.id);
+		} else {
+			$('.hidden').attr('class', 'showing');
+		}
 	});
 }
 

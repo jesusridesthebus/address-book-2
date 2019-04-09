@@ -35,10 +35,20 @@
           <p>First Name: <span class="first-name"></span></p>
           <p>Last Name: <span class="last-name"></span></p>
           <p>Phone Number: <span class="phone-number"></span></p>
+          <div id="add"></div>
           <div id="buttons"></div>
+          <div id="address-types" class="hidden">
+            <label for="address-add">Address: </label>
+            <input type="text" id="address-add" class="form-control">
+            <label for="add-address-type">Type of Address: </label>
+            <select id="add-address-type" class="form-control">
+              <option value="email">Email</option>
+              <option value="physical">Physical</option>
+            </select>
+          </div>
         </section>
       </section>
     </section>
-  </main>  
+  </main>
 </body>
 </html>
